@@ -92,13 +92,3 @@ State Drift: Argo CD's selfHeal: true guarantees that any manual changes to Kube
 🤝 Contributing
 This project was built for educational and portfolio purposes. Feel free to fork it, break it, and fix it!
 
-text
-
-### Step 3: Save and Push
-1. **Save** the file in Notepad (Ctrl+S) and close it.
-2. Run these commands in PowerShell to push it to GitHub:
-
-```powershell
-git add README.md
-git commit -m "Docs: Add complete README"
-git push origin main
