@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    environment {
+        REGISTRY = "localhost:5000"
+        APP_NAME = "python-microservice"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+    }
+    stages {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('Python Test') {
+            agent { docker { image 'python:3.12-slim'; reuseNode true } }
+            steps {
+                sh 'pip install -r requirements.txt && pytest app/tests'
+            }
+        }
+        stage('Build & Push') {
+            steps {
+                sh "docker build -t ${REGISTRY}/${APP_NAME}:${IMAGE_TAG} ."
+                sh "docker push ${REGISTRY}/${APP_NAME}:${IMAGE_TAG}"
+            }
+        }
+        stage('Update GitOps') {
+            steps {
+                withCredentials([string(credentialsId: 'github-pat', variable: 'PAT')]) {
+                    sh """
+                    git clone https://x-access-token:${PAT}@github.com/Rohit-A-13/gitops-manifests.git temp-gitops
+                    cd temp-gitops
+                    sed -i "s|image: .*|image: ${REGISTRY}/${APP_NAME}:${IMAGE_TAG}|" deployment.yaml
+                    git config user.email "jenkins@local"
+                    git config user.name "Jenkins"
+                    git add deployment.yaml
+                    git commit -m "Bump image to ${IMAGE_TAG}"
+                    git push origin main
+                    """
+                }
+            }
+        }
+    }
+}
