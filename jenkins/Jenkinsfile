@@ -1,3 +1,4 @@
+$jenkinsfileContent = @'
 pipeline {
     agent any
     environment {
@@ -10,9 +11,9 @@ pipeline {
             steps { checkout scm }
         }
         stage('Python Test') {
-            agent { docker { image 'python:3.12-slim'; reuseNode true } }
             steps {
-                sh 'pip install -r requirements.txt && pytest app/tests'
+                sh 'python3 -m venv venv || true'
+                sh '. venv/bin/activate && pip install -r requirements.txt && pytest app/tests'
             }
         }
         stage('Build & Push') {
@@ -39,3 +40,6 @@ pipeline {
         }
     }
 }
+'@
+
+Set-Content -Path "jenkins\Jenkinsfile" -Value $jenkinsfileContent -Encoding utf8
