@@ -1,4 +1,3 @@
-markdown
 # Local-GitOps-Python-Microservice
 
 A complete, production-style **CI/CD & GitOps pipeline** that runs **100% locally** on a single machine. No cloud accounts (AWS, GCP, Azure) or cloud credits are required.
@@ -95,11 +94,11 @@ This project was built for educational and portfolio purposes. Feel free to fork
 
 text
 
-### Step 3: Push the README to GitHub
-Save the file, close Notepad, and go back to your PowerShell terminal.
+### Step 3: Save and Push
+1. **Save** the file in Notepad (Ctrl+S) and close it.
+2. Run these commands in PowerShell to push it to GitHub:
 
-Run these exact commands to push your new README to the app repository:
 ```powershell
 git add README.md
-git commit -m "Docs: Add comprehensive README"
+git commit -m "Docs: Add complete README"
 git push origin main
